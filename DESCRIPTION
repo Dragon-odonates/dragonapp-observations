@@ -1,0 +1,30 @@
+Package: shinyFunBioDiv
+Type: Package
+Title: Shiny App for exploring FunBioDiv datasets
+Version: 0.0.2
+Authors@R: c(
+    person(given   = "Romain",
+           family  = "Frelat",
+           role    = c("aut", "cre"),
+           email   = "rom.frelat@gmail.com",
+           comment = c(ORCID = "0000-0002-8631-4398")))
+Description: Shiny App to explore the FunBioDiv datasets based on diversifaction measures, response variables, and other covariates.
+URL: https://rfrelat-cesab.shinyapps.io/shinyFunBioDiv/
+BugReports: https://github.com/FRBCesab/shinyFunBioDiv/issues
+License: GPLv3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Imports: 
+    devtools,
+    here,
+    readxl,
+    utils
+Depends: 
+    DT,
+    htmltools,
+    leaflet,
+    markdown,
+    sf,
+    shiny,
+    shinythemes
