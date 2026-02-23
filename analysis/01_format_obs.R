@@ -21,9 +21,9 @@ library(here)
 count_unique <- function(x) length(unique(x))
 
 # Parameters --------------------------------------------------------------
-period <- 1990:2024 # time period of interest
+period <- 2000:2024 # time period of interest
 
-res <- 50 # 50, 20, or 10
+# res <- 20 # 50, 20, or 10
 
 # Initialization ----------------------------------------------------------
 # Load data
@@ -34,6 +34,8 @@ df <- readRDS(here("data", "raw", "occ_all.rds"))
 outdir <- here("data", "derived", paste0("obs_", res))
 if (!file.exists(outdir)) {
   dir.create(outdir)
+} else {
+  file.remove(list.files(outdir))
 }
 
 # Load the grid (EEA grid from https://ec.europa.eu/eurostat/web/gisco/geodata/grids
@@ -108,6 +110,8 @@ ag$tot_obs <- tot_obs$n[match(ag$year_grid, tot_obs$year_grid)]
 ag$median <- round(ag$n / ag$tot_obs, 5)
 # replace Na by 0
 ag$median[is.na(ag$median)] <- 0
+# transform with sqrt to better see the small variations
+ag$median <- sqrt(ag$median)
 
 # remove species with too little grid cell
 grid_per_species <- tapply(ag$grid_id, ag$species, count_unique)
@@ -149,4 +153,7 @@ for (i in sort(unique(ag$species))) {
 }
 
 # Total size:
-# 4.2Mb for the 50km grid
+# 3.8Mb for 50km grid
+# 8.3Mb for 20km grid
+# 14.7Mb for 10km grid
+# 3 min of processing time on Rossinante

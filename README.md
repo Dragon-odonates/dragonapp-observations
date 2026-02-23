@@ -1,8 +1,8 @@
 # dragonapp Observation data
 
-Customize the [dragonapp](https://github.com/Dragon-odonates/dragonapp) with observation data at different spatial scales, and deploying it [online](add link).
+Customize the [dragonapp](https://github.com/Dragon-odonates/dragonapp) with observation data at different spatial scales, and deploying it [online](https://rfrelat-cesab.shinyapps.io/Dragon_obs/).
 
-The customization is made in three successive steps that are documented in this research compendium.
+The customization is made in four successive steps that are documented in this research compendium.
 
 
 ### 1. Install the latest version of dragonapp
@@ -17,6 +17,8 @@ if (!requireNamespace(c("remotes"), quietly = TRUE)) {
 
 ## Install < dragonapp > from GitHub ----
 remotes::install_github("Dragon-odonates/dragonapp", force = TRUE)
+
+library(dragonapp)
 ```
 
 
@@ -25,44 +27,63 @@ remotes::install_github("Dragon-odonates/dragonapp", force = TRUE)
 
 We use the [EEA Reference grid](https://ec.europa.eu/eurostat/web/gisco/geodata/grids) at 50km, 20km, and 10km.
 
-To follow this procedure, you need to clone this repository in Github. Then follow the three steps below.
-
-#### 1. Update the metadata
-
 ```r
-devtools::load_all()
-source("analysis/01_prepare_data.R")
-source("analysis/02_contingency.R")
+scales <- c(10, 20, 50)
+for (i in scales){
+  res <- i
+  source("analysis/01_format_obs.R")
+}
 ```
 
-#### 2. Test the shiny app
+### 3. Update the Shiny App
+
+#### Include the new observation datasets
+
+```r
+scales <- c(10, 20, 50)
+for (i in paste("obs", scales, sep = "_")) {
+  # add dataset
+  add_shiny_data(
+    folder = here::here("data", "derived", i),
+    label = i,
+    overwrite = TRUE
+  )
+}
+
+# Finally remove the example dataset
+rm_shiny_data("psi")
+```
+
+#### Update the page about.md
+
+```r
+# update about.md
+get_about_md(here::here("data"))
+# manually edit the file update.md then
+update_about_md(here::here("data", "about_obs.md"))
+```
+
+### 4. Deploy the shinyapp on shinyapp.io
+
+#### Test the shiny app
 
 ```r
 # run the Shiny app locally
 runShiny()
 ```
+If you like it, proceed to the next step
 
-#### 3. Deploy the shiny app to shinyapps.io
+#### Deploy the shiny app to shinyapps.io
 
 ```r
 # deploy the shinyapp to online server
+appDir <- system.file("app", package = "dragonapp")
+
 rsconnect::deployApp(
-    appDir = "app",
-    appFiles = rsconnect::listDeploymentFiles("app"),
-    appName = "shinyFunBioDiv",
-    appTitle = "FunBioDiv data explorer"
+    appDir = appDir,
+    appFiles = rsconnect::listDeploymentFiles(appDir),
+    appName = "Dragon_obs",
+    appTitle = "Dragonflu observations"
 )
-```
-
-
-## Create the metadata Dashboard
-
-```r
-quarto::quarto_render("analysis/04_explore.qmd")
-file.rename("analysis/04_explore.html", "docs/metadata_Funbiodiv.html")
-```
-
-```r
-quarto::quarto_render("analysis/05_overview.qmd")
-file.rename("analysis/05_overview.html", "docs/overview_Funbiodiv.html")
+# 26Mb : Huge !
 ```
