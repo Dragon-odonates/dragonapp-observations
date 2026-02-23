@@ -16,7 +16,7 @@ if (!requireNamespace(c("remotes"), quietly = TRUE)) {
 }
 
 ## Install < dragonapp > from GitHub ----
-remotes::install_github("Dragon-odonates/dragonapp")
+remotes::install_github("Dragon-odonates/dragonapp", force = TRUE)
 ```
 
 

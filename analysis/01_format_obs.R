@@ -106,6 +106,8 @@ ag$tot_obs <- tot_obs$n[match(ag$year_grid, tot_obs$year_grid)]
 
 # get the percentage of observation
 ag$median <- round(ag$n / ag$tot_obs, 5)
+# replace Na by 0
+ag$median[is.na(ag$median)] <- 0
 
 # remove species with too little grid cell
 grid_per_species <- tapply(ag$grid_id, ag$species, count_unique)
@@ -129,6 +131,8 @@ ag <- ag[ag$grid_id %in% keep_grid, ]
 # 10k: 109 species, 18101 grid cells
 
 # Export data -------------------------------------------------------------
+# select grid cell in ag
+grid <- grid[grid$grid_id %in% ag$grid_id, ]
 # project grid to latlong
 grid_4326 <- project(grid, "EPSG:4326")
 # export as grid.gpkg

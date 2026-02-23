@@ -20,6 +20,7 @@ rsconnect/
 
 # raw data file (also in shared GoogleDrive)
 data/raw/
+data/derived/
 
 # dev files
 analysis/dev-*
