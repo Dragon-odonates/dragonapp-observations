@@ -4,6 +4,18 @@ Customize the [dragonapp](https://github.com/Dragon-odonates/dragonapp) with obs
 
 The customization is made in four successive steps that are documented in this research compendium.
 
+## Overview
+
+This repository is structured as follow:
+
+- :file_folder: &nbsp;`analysis/`: contains R script to format observation data to the shiny app;
+- :file_folder: &nbsp;`app/`: contains the dragonapp shiny files (no data stored online);
+- :file_folder: &nbsp;`data/`: folder that should contains the observation data (not stored online);
+
+## Get started
+
+> Follow this 4-step procedure to update occupancy model data in the shiny app.  
+
 
 ### 1. Install the latest version of dragonapp
 
@@ -28,7 +40,7 @@ library(dragonapp)
 We use the [EEA Reference grid](https://ec.europa.eu/eurostat/web/gisco/geodata/grids) at 50km, 20km, and 10km.
 
 ```r
-scales <- c(10, 20, 50)
+scales <- c(50, 20, 10)
 for (i in scales){
   res <- i
   source("analysis/01_format_obs.R")
@@ -40,18 +52,23 @@ for (i in scales){
 #### Include the new observation datasets
 
 ```r
-scales <- c(10, 20, 50)
-for (i in paste("obs", scales, sep = "_")) {
+scales <- c(50, 20, 10)
+lab <- c("B_50k", "A_20k", "C_10k")
+for (i in seq_along(scales)) {
   # add dataset
+  folder <- here::here("data", "derived",paste("obs", scales[i], sep = "_"))
+  obsf <- list.files(folder, "^obs_.*rds$", full.names = TRUE)
+  gridf <- file.path(folder, "grid.gpkg")
   add_shiny_data(
-    folder = here::here("data", "derived", i),
-    label = i,
+    sp_files = obsf,
+    grid_file = gridf,
+    label = lab[i],
     overwrite = TRUE
   )
 }
 
 # Finally remove the example dataset
-rm_shiny_data("psi")
+rm_shiny_data("obs")
 ```
 
 #### Update the page about.md
@@ -83,7 +100,19 @@ rsconnect::deployApp(
     appDir = appDir,
     appFiles = rsconnect::listDeploymentFiles(appDir),
     appName = "Dragon_obs",
-    appTitle = "Dragonflu observations"
+    appTitle = "Dragonfly observations"
 )
-# 26Mb : Huge !
+# 39Mb : Huge !
 ```
+
+#### Save the app locally
+
+```r
+save_app(here::here(), compress = FALSE)
+```
+
+
+
+## Acknowledgments
+
+This research is a product of the [Dragon group](https://www.fondationbiodiversite.fr/en/the-frb-in-action/programs-and-projects/le-cesab/dragon/) funded from the [2022 FRB/MTE/OFB Impacts call](https://www.fondationbiodiversite.fr/la-frb-en-action/programmes-et-projets/impacts-sur-la-biodiversite-terrestre-dans-lanthropocene/).
