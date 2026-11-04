@@ -1,30 +1,40 @@
-Package: shinyFunBioDiv
+Package: dragonapp.observations
 Type: Package
-Title: Shiny App for exploring FunBioDiv datasets
-Version: 0.0.2
+Title: Research compendium to visually explore spatio-temporal observations of odonates
+Version: 0.0.3
 Authors@R: c(
     person(given   = "Romain",
            family  = "Frelat",
            role    = c("aut", "cre"),
            email   = "rom.frelat@gmail.com",
-           comment = c(ORCID = "0000-0002-8631-4398")))
-Description: Shiny App to explore the FunBioDiv datasets based on diversifaction measures, response variables, and other covariates.
-URL: https://rfrelat-cesab.shinyapps.io/shinyFunBioDiv/
-BugReports: https://github.com/FRBCesab/shinyFunBioDiv/issues
-License: GPLv3
+           comment = c(ORCID = "0000-0002-8631-4398")),
+    person(given   = "Lisa",
+           family  = "Nicvert",
+           role    = c("aut"),
+           email   = "lisa.nicvert@fondationbiodiversite.fr",
+           comment = c(ORCID = "0009-0006-5763-0865")))
+Description: This research compendium creates a shiny app to 
+  visually explore the odonates observations. 
+URL: https://github.com/Dragon-odonates/dragonapp-observations
+BugReports: https://github.com/Dragon-odonates/dragonapp-observations/issues
+License: GPLv3 + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Imports: 
-    devtools,
-    here,
-    readxl,
-    utils
 Depends: 
-    DT,
+    bslib,
+    data.table,
+    dragonapp,
+    here,
     htmltools,
+    leafgl,
     leaflet,
     markdown,
+    plotly,
     sf,
     shiny,
-    shinythemes
+    shinycssloaders,
+    terra
+Imports: 
+    RColorBrewer,
+    rsconnect

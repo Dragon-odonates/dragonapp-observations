@@ -1,9 +1,5 @@
 # Prepare observation data for the Shiny app
 
-# clean occ_all.rds
-# select time period
-# make sure coordinates are in Europe
-# create ID
 # Input
 # save as occ_clean_all.rds
 # Output:
@@ -27,7 +23,7 @@ period <- 2000:2024 # time period of interest
 
 # Initialization ----------------------------------------------------------
 # Load data
-df <- readRDS(here("data", "raw", "occ_all.rds"))
+df <- readRDS(here("data", "raw", paste0("data_long_", res, "000.rds")))
 # nrow(df) # 12.442.338
 
 # set the output directory

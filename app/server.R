@@ -115,6 +115,9 @@ function(input, output, session) {
   observe({
     pts <- sub_pt()
     pal <- colpal()
+    if (input$map == "dynamic") {
+      req(input$year)
+    }
     ind <- ifelse(
       input$map == "dynamic",
       names(pts)[grepl(input$year, names(pts))],
@@ -125,7 +128,8 @@ function(input, output, session) {
 
     leafletProxy("mapdistri", data = pts) |>
       #clearShapes() |>
-      removeGlPolygons(layerId = 'mapid') |>
+      clearGroup("mapid") |>
+      # removeGlPolygons(layerId = 'mapid') |>
       addGlPolygons(
         data = pts,
         fillColor = pal(pts[[ind]]),
@@ -147,7 +151,7 @@ function(input, output, session) {
 
   # Trends per species ------------------------------------------------------
   output$psits <- renderPlotly({
-    req(input$year)
+    # req(input$year)
     dts <- sub_ts()
     num_countries <- length(unique(dts$country))
     pal <- colorRampPalette(RColorBrewer::brewer.pal(8, "Set2"))(num_countries)
@@ -173,15 +177,15 @@ function(input, output, session) {
       ) |>
       layout(
         xaxis = list(title = 'Year'),
-        yaxis = list(title = 'Average probability'),
-        shapes = list(list(
-          type = "line",
-          x0 = input$year,
-          x1 = input$year,
-          y0 = 0,
-          y1 = max(dts$mean, na.rm = TRUE),
-          line = list(color = "black")
-        ))
+        yaxis = list(title = 'Average probability')
+        # shapes = list(list(
+        #   type = "line",
+        #   x0 = input$year,
+        #   x1 = input$year,
+        #   y0 = 0,
+        #   y1 = max(dts$mean, na.rm = TRUE),
+        #   line = list(color = "black")
+        # ))
       ) |>
       config(
         modeBarButtons = list(list("toImage")),
