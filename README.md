@@ -1,6 +1,6 @@
 # dragonapp Observation data
 
-Customize the [dragonapp](https://github.com/Dragon-odonates/dragonapp) with observation data at different spatial scales, and deploying it [online](https://rfrelat-cesab.shinyapps.io/Dragon_obs/).
+Customize the [dragonapp](https://github.com/Dragon-odonates/dragonapp) with observation data at different spatial scales, and deploying it [online](hhttps://rapps-dragonobservations.share.connect.posit.cloud/).
 
 The customization is made in four successive steps that are documented in this research compendium.
 
@@ -111,7 +111,17 @@ rsconnect::deployApp(
 save_app(here::here(), compress = FALSE)
 ```
 
-
+```r
+# deploy local version to Posit
+appDir <- here::here("app")
+shiny::runApp(appDir)
+rsconnect::deployApp(
+    appDir = appDir,
+    appFiles = rsconnect::listDeploymentFiles(appDir),
+    appName = "dragon_observations",
+    appTitle = "Odonates observations in Europe"
+)
+```
 
 ## Acknowledgments
 

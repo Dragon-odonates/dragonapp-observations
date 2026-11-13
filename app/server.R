@@ -125,16 +125,17 @@ function(input, output, session) {
     )
 
     leg <- ifelse(input$map == "dynamic", input$year, input$map)
-
+    ptsv <- pts[!is.na(pts[[ind]]), ]
     leafletProxy("mapdistri", data = pts) |>
       #clearShapes() |>
       clearGroup("mapid") |>
       # removeGlPolygons(layerId = 'mapid') |>
       addGlPolygons(
-        data = pts,
-        fillColor = pal(pts[[ind]]),
+        data = ptsv,
+        color = pal(ptsv[[ind]]),
+        fillColor = pal(ptsv[[ind]]),
         fillOpacity = 0.7,
-        popup = pts[[ind]],
+        popup = ptsv[[ind]],
         layerId = 'mapid'
       ) |>
       clearControls() |>
